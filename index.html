@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苙僑學習成長談</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b1512;
+    --bg-alt: #10201b;
+    --surface: #152621;
+    --surface-2: #1a2e27;
+    --primary: #0e3d2f;
+    --primary-light: #1c6b4e;
+    --accent: #4fe3a0;
+    --accent-dim: #2f8f6b;
+    --text: #e9f2ec;
+    --text-muted: #86a196;
+    --text-faint: #4d635a;
+    --border: rgba(79, 227, 160, 0.16);
+    --glow: rgba(79, 227, 160, 0.35);
+    --font-display: 'Noto Serif TC', serif;
+    --font-body: 'Noto Sans TC', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.7;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* subtle grid backdrop */
+  body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(79,227,160,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,227,160,0.035) 1px, transparent 1px);
+    background-size:64px 64px;
+    pointer-events:none;
+    z-index:0;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 90%);
+  }
+
+  .wrap{ position:relative; z-index:1; }
+
+  ::selection{ background:var(--accent); color:#04120c; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    color:var(--accent-dim);
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+  }
+  .eyebrow::before{
+    content:'';
+    width:18px; height:1px;
+    background:var(--accent-dim);
+    display:inline-block;
+  }
+
+  section{
+    position:relative;
+    padding:7rem 8vw;
+  }
+
+  /* -------- NAV -------- */
+  .nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:50;
+    padding:1.4rem 8vw;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    background:linear-gradient(to bottom, rgba(11,21,18,0.9), transparent);
+    backdrop-filter:blur(2px);
+  }
+  .nav .mark{ color:var(--accent); font-weight:600; }
+  .nav .mark span{ color:var(--text-muted); }
+  .nav .status{
+    display:flex; align-items:center; gap:0.5rem;
+    color:var(--text-muted);
+  }
+  .nav .status .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--accent);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.4; transform:scale(0.7); }
+  }
+
+  /* -------- HERO -------- */
+  .hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:6rem;
+    overflow:hidden;
+  }
+
+  .hero-line{
+    position:absolute;
+    top:0; right:6vw;
+    width:min(46vw, 560px);
+    height:100%;
+    opacity:0.9;
+    pointer-events:none;
+  }
+  .hero-line svg{ width:100%; height:100%; }
+  .hero-line path.growth{
+    fill:none;
+    stroke:url(#growthGradient);
+    stroke-width:2;
+    stroke-linecap:round;
+    stroke-dasharray:1400;
+    stroke-dashoffset:1400;
+    animation:draw 2.6s 0.4s cubic-bezier(.2,.7,.2,1) forwards;
+    filter:drop-shadow(0 0 6px var(--glow));
+  }
+  .hero-line circle{
+    opacity:0;
+    animation:nodeIn 0.6s ease-out forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+  @keyframes nodeIn{ to{ opacity:1; } }
+
+  .hero-content{ max-width:760px; }
+
+  .hero-title{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    line-height:1.15;
+    letter-spacing:0.01em;
+    margin:1.4rem 0 1.6rem;
+    opacity:0;
+    animation:riseIn 0.9s 0.15s ease-out forwards;
+  }
+  .hero-title .accent-word{
+    background:linear-gradient(100deg, var(--accent), var(--primary-light));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .hero-sub{
+    font-size:clamp(1rem, 1.6vw, 1.15rem);
+    color:var(--text-muted);
+    max-width:520px;
+    opacity:0;
+    animation:riseIn 0.9s 0.4s ease-out forwards;
+  }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:2.6rem; left:8vw;
+    display:flex; align-items:center; gap:0.8rem;
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    color:var(--text-faint);
+    letter-spacing:0.15em;
+  }
+  .scroll-cue .bar{
+    width:1px; height:34px;
+    background:linear-gradient(var(--accent), transparent);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* -------- reveal on scroll -------- */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity 0.9s cubic-bezier(.2,.7,.2,1), transform 0.9s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-delay-1.in{ transition-delay:0.1s; }
+  .reveal-delay-2.in{ transition-delay:0.2s; }
+  .reveal-delay-3.in{ transition-delay:0.3s; }
+  .reveal-delay-4.in{ transition-delay:0.4s; }
+
+  /* -------- ABOUT -------- */
+  .about{
+    background:linear-gradient(180deg, transparent, var(--bg-alt) 12%, var(--bg-alt) 88%, transparent);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .about-grid{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:3rem;
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .about-label{ padding-top:0.4rem; }
+  .about-title{
+    font-family:var(--font-display);
+    font-size:1.6rem;
+    font-weight:700;
+    margin-top:0.8rem;
+  }
+  .about-text{
+    font-size:1.05rem;
+    color:var(--text);
+    max-width:640px;
+  }
+  .about-text p{ margin-bottom:1.1rem; }
+  .about-text p:last-child{ margin-bottom:0; }
+  .about-text .lead{
+    font-size:1.2rem;
+    color:var(--text);
+    font-weight:500;
+  }
+  .about-text .muted{ color:var(--text-muted); }
+
+  /* -------- HIGHLIGHTS -------- */
+  .highlights{ max-width:1180px; margin:0 auto; }
+  .section-head{
+    display:flex;
+    flex-direction:column;
+    gap:0.9rem;
+    margin-bottom:3.4rem;
+    max-width:640px;
+  }
+  .section-title{
+    font-family:var(--font-display);
+    font-size:clamp(1.8rem, 3.4vw, 2.6rem);
+    font-weight:700;
+  }
+  .section-title .glow{ color:var(--accent); }
+  .section-desc{ color:var(--text-muted); font-size:1rem; }
+
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1.6px;
+    background:var(--border);
+    border:1px solid var(--border);
+  }
+  .card{
+    background:var(--surface);
+    padding:2.4rem 2.2rem;
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    transition:background 0.4s ease;
+    position:relative;
+  }
+  .card:hover{ background:var(--surface-2); }
+  .card:hover .card-index{ color:var(--accent); }
+  .card-index{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    color:var(--text-faint);
+    letter-spacing:0.1em;
+    transition:color 0.4s ease;
+  }
+  .card-title{
+    font-family:var(--font-display);
+    font-size:1.3rem;
+    font-weight:700;
+  }
+  .card-desc{
+    color:var(--text-muted);
+    font-size:0.96rem;
+  }
+  .card-bar{
+    height:2px;
+    width:32px;
+    background:var(--accent-dim);
+    margin-top:auto;
+  }
+
+  /* -------- CTA -------- */
+  .cta{
+    text-align:center;
+    padding-top:8rem;
+    padding-bottom:9rem;
+  }
+  .cta-inner{
+    max-width:640px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.6rem;
+  }
+  .cta-title{
+    font-family:var(--font-display);
+    font-size:clamp(1.9rem, 4vw, 2.8rem);
+    font-weight:700;
+  }
+  .cta-desc{ color:var(--text-muted); }
+
+  .btn{
+    font-family:var(--font-mono);
+    font-size:0.92rem;
+    letter-spacing:0.08em;
+    padding:1rem 2.6rem;
+    border:1px solid var(--accent-dim);
+    background:transparent;
+    color:var(--text);
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+  .btn::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:var(--accent);
+    transform:translateY(101%);
+    transition:transform 0.45s cubic-bezier(.2,.7,.2,1);
+    z-index:-1;
+  }
+  .btn:hover{
+    color:#04120c;
+    border-color:var(--accent);
+    box-shadow:0 0 30px var(--glow);
+  }
+  .btn:hover::before{ transform:translateY(0); }
+  .btn:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  /* -------- FOOTER -------- */
+  footer{
+    padding:2.4rem 8vw 3rem;
+    border-top:1px solid var(--border);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    color:var(--text-faint);
+    flex-wrap:wrap;
+    gap:1rem;
+  }
+
+  /* -------- CUSTOM CURSOR -------- */
+  .cursor-dot,
+  .cursor-ring{
+    position:fixed;
+    top:0; left:0;
+    pointer-events:none;
+    z-index:999;
+    border-radius:50%;
+    transform:translate(-50%, -50%);
+    will-change:transform;
+  }
+  .cursor-dot{
+    width:6px; height:6px;
+    background:var(--accent);
+    box-shadow:0 0 8px var(--glow);
+  }
+  .cursor-ring{
+    width:34px; height:34px;
+    border:1px solid var(--accent-dim);
+    opacity:0.7;
+    transition:width 0.3s ease, height 0.3s ease, opacity 0.3s ease, border-color 0.3s ease;
+  }
+  body.cursor-active .cursor-ring{
+    width:52px; height:52px;
+    border-color:var(--accent);
+    opacity:1;
+  }
+  @media (hover:none), (pointer:coarse){
+    .cursor-dot, .cursor-ring{ display:none; }
+  }
+
+  /* -------- RESPONSIVE -------- */
+  @media (max-width: 860px){
+    section{ padding:5rem 6vw; }
+    .about-grid{ grid-template-columns:1fr; gap:1.6rem; }
+    .card-grid{ grid-template-columns:1fr; }
+    .hero-line{ width:70vw; opacity:0.5; right:2vw; }
+    .cta{ padding-top:5rem; padding-bottom:6rem; }
+  }
+
+  @media (max-width: 480px){
+    .nav{ padding:1.1rem 6vw; font-size:0.7rem; }
+    .hero{ padding-top:5rem; }
+    .scroll-cue{ left:6vw; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <div class="mark">苙僑<span> // GROWTH.LOG</span></div>
+    <div class="status"><span class="dot"></span>ONLINE</div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-line" aria-hidden="true">
+      <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="growthGradient" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stop-color="#1c6b4e"/>
+            <stop offset="100%" stop-color="#4fe3a0"/>
+          </linearGradient>
+        </defs>
+        <path class="growth" d="M20,560 C80,540 60,460 110,430 C170,395 150,320 210,280 C260,246 240,180 300,140 C330,120 320,90 380,50" />
+        <circle cx="20" cy="560" r="4" fill="#1c6b4e" style="animation-delay:0.5s"/>
+        <circle cx="110" cy="430" r="4" fill="#2f8f6b" style="animation-delay:1.2s"/>
+        <circle cx="210" cy="280" r="4" fill="#3fae82" style="animation-delay:1.9s"/>
+        <circle cx="300" cy="140" r="4" fill="#4fe3a0" style="animation-delay:2.5s"/>
+        <circle cx="380" cy="50" r="5" fill="#4fe3a0" style="animation-delay:2.9s"/>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <div class="eyebrow">PERSONAL LOG · 個人介紹</div>
+      <h1 class="hero-title">苙僑<span class="accent-word">學習成長談</span></h1>
+      <p class="hero-sub">這裡沒有濾鏡過的成功學,只有一路走來真實記錄下的方法、彎路與心得——寫給正在自己路上前進的你。</p>
+    </div>
+
+    <div class="scroll-cue"><span class="bar"></span>SCROLL</div>
+  </section>
+
+  <section class="about">
+    <div class="about-grid">
+      <div class="about-label reveal">
+        <div class="eyebrow">ABOUT · 關於</div>
+        <div class="about-title">先說說<br>我是誰</div>
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <p class="lead">哈囉,我是苙僑。</p>
+        <p>這幾年我把大部分時間花在持續學習與自我成長上,從一開始的摸索方向、跌跌撞撞,到後來慢慢建立起一套屬於自己的方法與節奏。</p>
+        <p class="muted">我相信成長沒有捷徑,唯一有用的是願不願意誠實面對自己的每一步——包括那些不那麼順利的階段。</p>
+        <p class="muted">這個頁面,是我目前為止最誠實、也最完整的一次分享。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="highlights">
+    <div class="section-head reveal">
+      <div class="eyebrow">HIGHLIGHTS · 亮點</div>
+      <h2 class="section-title">完全分享,<span class="glow">不藏私</span></h2>
+      <p class="section-desc">這些是我最常被問到、也最值得說清楚的部分。沒有保留,只有實話。</p>
+    </div>
+
+    <div class="card-grid">
+      <div class="card reveal reveal-delay-1">
+        <div class="card-index">01 / METHOD</div>
+        <div class="card-title">方法論,全部攤開</div>
+        <p class="card-desc">從目標設定到每日執行的節奏,我怎麼安排時間、怎麼檢核進度,完整不打折地說清楚。</p>
+        <div class="card-bar"></div>
+      </div>
+      <div class="card reveal reveal-delay-2">
+        <div class="card-index">02 / DETOURS</div>
+        <div class="card-title">走過的彎路</div>
+        <p class="card-desc">哪些嘗試失敗了、哪些決定回頭看是錯的,這些經驗往往比成功更值得參考。</p>
+        <div class="card-bar"></div>
+      </div>
+      <div class="card reveal reveal-delay-3">
+        <div class="card-index">03 / MINDSET</div>
+        <div class="card-title">心態上的轉折</div>
+        <p class="card-desc">在卡關與懷疑自己的時刻,我是怎麼調整心態、重新找回節奏繼續走下去的。</p>
+        <div class="card-bar"></div>
+      </div>
+      <div class="card reveal reveal-delay-4">
+        <div class="card-index">04 / NOW</div>
+        <div class="card-title">現在進行式</div>
+        <p class="card-desc">成長還在路上,我仍在持續調整方法、記錄過程,這個頁面也會跟著一起更新。</p>
+        <div class="card-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner reveal">
+      <div class="eyebrow">CONNECT · 聯絡</div>
+      <h2 class="cta-title">想聊聊你的成長路?</h2>
+      <p class="cta-desc">不管是想交流方法,還是單純想打聲招呼,都歡迎讓我知道。</p>
+      <a href="mailto:hello@example.com" class="btn">聯絡我</a>
+    </div>
+  </section>
+
+  <footer>
+    <div>© 2026 苙僑</div>
+    <div>GROWTH.LOG — STILL WRITING</div>
+  </footer>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var reveals = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(function (el) { observer.observe(el); });
+
+    // ---- floating custom cursor ----
+    var isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (isFinePointer) {
+      var dot = document.querySelector('.cursor-dot');
+      var ring = document.querySelector('.cursor-ring');
+      var mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+      var dotX = mouseX, dotY = mouseY;
+      var ringX = mouseX, ringY = mouseY;
+
+      window.addEventListener('mousemove', function (e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function loop() {
+        // dot follows almost instantly, ring trails with easing for a floating feel
+        dotX += (mouseX - dotX) * 0.35;
+        dotY += (mouseY - dotY) * 0.35;
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+
+        dot.style.transform = 'translate(' + dotX + 'px, ' + dotY + 'px) translate(-50%, -50%)';
+        ring.style.transform = 'translate(' + ringX + 'px, ' + ringY + 'px) translate(-50%, -50%)';
+
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      var interactiveEls = document.querySelectorAll('a, button, .card, .btn');
+      interactiveEls.forEach(function (el) {
+        el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-active'); });
+        el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-active'); });
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
